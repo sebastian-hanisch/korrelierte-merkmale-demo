@@ -47,9 +47,9 @@ def test_verdict_exact_reports_the_known_coefficient_values():
 
 def test_verdict_outside_warns_above_twenty_percent():
     kind, text = ev.verdict_outside(_analysis(outside=(0.77, 0.7709)))
-    assert kind == "warning" and "**77,0 %**" in text and "exakt: 77,1 %" in text and "1,1 %" in text and "raten" in text
+    assert kind == "warning" and "**77,0 %**" in text and "exakt: 77,1 %" in text and "1,1 %" in text and "extrapoliert" in text
     kind, text = ev.verdict_outside(_analysis(outside=(0.045, 0.0439)))
-    assert kind == "info" and "raten" not in text
+    assert kind == "info" and "extrapoliert" not in text
     assert ev.verdict_outside(_analysis(outside=(0.2, 0.2)))[0] == "info" and ev.verdict_outside(_analysis(outside=(0.2, 0.2001)))[0] == "warning"
 
 
@@ -92,7 +92,7 @@ def test_verdict_trees_compares_same_data_and_new_data():
     rows = [{"trees": 100, "rho": 0.99, "same_data_sd": 0.023, "new_data_sd": 0.178}, {"trees": 10, "rho": 0.99, "same_data_sd": 0.082, "new_data_sd": 0.182}]
     kind, text = ev.verdict_trees(rows)
     assert kind == "warning"
-    for needle in ("mit 10 Bäumen", "0,082", "mit 100 Bäumen nur noch mit 0,023", "0,182 und 0,178", "mehr Bäume beruhigen sie nicht"):
+    for needle in ("mit 10 Bäumen", "0,082", "mit 100 Bäumen nur noch mit 0,023", "0,182 und 0,178", "mehr Bäume beruhigen sie kaum"):
         assert needle in text, needle
 
 

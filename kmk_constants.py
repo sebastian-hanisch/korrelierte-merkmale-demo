@@ -58,9 +58,9 @@ PRESETS = {
 # Die Hilfetexte nennen Zahlen des vorgerechneten Rasters (data/importance_grid.json) und exakte Werte; tests/test_claims.py prüft jede davon.
 PRESET_HELP = {
     "Standardfall (Voreinstellung)": "Beide tragen bei, ρ = 0,5: Im Raster ist die Summe der Einzelwichtigkeiten 1,23 (bei ρ = 0: 1,67), die Gruppe aus A und B 1,77 und die bedingte Wichtigkeit je Zwilling 0,44.",
-    "Dieselbe Information, springende Aufteilung": "ρ = 0,99, beide tragen bei: Im Raster (100 Wälder) bleibt der mittlere Anteil von A bei 49,0 %, doch er streut mit 0,181 von Datensatz zu Datensatz, und in 33,0 % der Läufe gehört einem Zwilling mehr als 70 %.",
+    "Dieselbe Information, springende Aufteilung": "ρ = 0,99, beide tragen bei: Im Raster (100 Wälder) bleibt der mittlere Anteil von A bei 49,0 %, doch er streut mit 0,181 von Datensatz zu Datensatz, und in etwa einem Drittel der Läufe (33,0 % bei 100 Wäldern) gehört einem Zwilling mehr als 70 %.",
     "Nur A trägt bei": "Nur A trägt bei, ρ = 0,999: Im Raster bekommt B 0,50 und A nur noch 0,99 (bei ρ = 0: A 1,87, B 0,00); bis ρ = 0,9 blieb B bei höchstens 0,002.",
     "Ohne Zwilling": "Unabhängige Zwillinge, beide tragen bei: A 0,83, B 0,84, die Summe 1,67 und die Gruppe 1,67 sind gleich; bedingt 0,80 und 0,81; Rauschmerkmale 0,00 (Raster).",
     "Gruppe bilden": "ρ = 0,9: Gemeinsam gemischt hat die Gruppe 1,84, die Summe der Einzelwerte nur 1,22. Die Schwelle der Gruppenbildung ist ein Regler: bei 0,9 findet die Spearman-Gruppierung das Paar im Raster nur in 17,0 % der Läufe.",
-    "Mischen erzeugt Unmögliches": "ρ = 0,99: Nach dem Mischen von A liegen exakt 77,1 % der Zeilen außerhalb des 3-Sigma-Bereichs (bei unabhängigen Merkmalen 1,1 %): Zeilen, die es in der Welt nicht gibt.",
+    "Mischen erzeugt Unmögliches": "ρ = 0,99: Nach dem Mischen von A liegen exakt 77,1 % der Zeilen außerhalb des 3-Sigma-Bereichs (bei unabhängigen Merkmalen 1,1 %): Zeilen aus einem Bereich, in dem nur etwa 1 % der echten Zeilen liegen.",
 }

@@ -215,7 +215,7 @@ def verdict_outside(a: Analysis) -> tuple[str, str]:
     """Extrapolation: Anteil der Zeilen außerhalb des Datenbereichs nach dem Mischen von A."""
     text = (f"Nach dem Mischen von A liegen **{_pct(a.outside)}** der Zeilen außerhalb des {C.K_SIGMA:g}-Sigma-Bereichs der gemeinsamen Verteilung von A und B (exakt: {_pct(a.outside_exact)}); "
             f"bei unabhängigen Merkmalen wären es {_pct(K.outside_share_exact(0.0))}.")
-    return ("warning" if a.outside_exact > 0.2 else "info"), text + (" Diese Zeilen kommen in der Welt nicht vor, die Bäume raten dort." if a.outside_exact > 0.2 else "")
+    return ("warning" if a.outside_exact > 0.2 else "info"), text + (" Diese Zeilen liegen in einem Bereich, in dem nur etwa 1 % der echten Zeilen liegen; vermutlich extrapoliert der Wald dort." if a.outside_exact > 0.2 else "")
 
 
 def verdict_groups(a: Analysis) -> tuple[str, str]:
@@ -249,7 +249,7 @@ def verdict_trees(rows: list[dict]) -> tuple[str, str]:
     rows = sorted(rows, key=lambda r: r["trees"])
     lo, hi = rows[0], rows[-1]
     return "warning", (f"ρ = {_rho(lo['rho'])}: mit {lo['trees']} Bäumen und gleichen Daten streut die Aufteilung mit {_num(lo['same_data_sd'], 3)}, mit {hi['trees']} Bäumen nur noch mit {_num(hi['same_data_sd'], 3)}; "
-                       f"bei **neuen Daten** bleibt sie bei {_num(lo['new_data_sd'], 3)} und {_num(hi['new_data_sd'], 3)}: mehr Bäume beruhigen sie nicht, sie hängt an der Stichprobe.")
+                       f"bei **neuen Daten** bleibt sie bei {_num(lo['new_data_sd'], 3)} und {_num(hi['new_data_sd'], 3)}: mehr Bäume beruhigen sie kaum, sie hängt an der Stichprobe.")
 
 
 def verdict_only_a(rows: list[dict]) -> tuple[str, str]:
@@ -258,7 +258,7 @@ def verdict_only_a(rows: list[dict]) -> tuple[str, str]:
     calm = [r for r in cells if r["rho"] <= 0.9]
     top = cells[-1]
     return "warning", (f"Nur A trägt bei: bis ρ = {_rho(calm[-1]['rho'])} bleibt B bei höchstens {_num(max(r['b'] for r in calm), 3)}; bei ρ = {_rho(top['rho'])} bekommt B **{_num(top['b'])}** "
-                       f"und A fällt von {_num(cells[0]['a'])} auf {_num(top['a'])}. Die Verwässerung gilt nur, wenn beide Zwillinge Information tragen.")
+                       f"und A fällt von {_num(cells[0]['a'])} auf {_num(top['a'])}. Bis ρ = {_rho(calm[-1]['rho'])} gilt die Verwässerung nur, wenn beide Zwillinge Information tragen; ab ρ = 0,99 verteilt der Wald die Wichtigkeit auch auf eine bloße Kopie.")
 
 
 def verdict_outside_grid(rows: list[dict], rho: float) -> tuple[str, str]:

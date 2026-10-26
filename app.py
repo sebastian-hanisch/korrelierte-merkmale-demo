@@ -73,7 +73,7 @@ with st.expander("So funktioniert es", expanded=True):
 |---|---|
 | **Zwillinge A und B** | Zwei Kennzahlen mit der Korrelation ρ. In der Welt „beide tragen bei“ gilt Wartezeit = A + B + Rauschen, in der Welt „nur A trägt bei“ ist B nur eine verrauschte Kopie von A. Dazu kommen unabhängige Rauschkennzahlen. |
 | **Permutationswichtigkeit** | Eine Spalte wird zufällig durcheinandergemischt; um wie viel schlechter sagt der Wald danach voraus? Angegeben als **Abfall von R²** auf den Zeilen, die ein Baum nie gesehen hat (Out-of-Bag). |
-| **Einzeln mischen** | Nur A (oder nur B) wird gemischt. Bei starker Korrelation entstehen dabei Zeilen, die es in der Welt nicht gibt (**Extrapolation**). |
+| **Einzeln mischen** | Nur A (oder nur B) wird gemischt. Bei starker Korrelation entstehen dabei Zeilen aus einem Bereich, in dem nur wenige echte Zeilen liegen (**Extrapolation**). |
 | **Gruppe mischen** | A und B werden mit **derselben** Umordnung gemischt und bleiben zusammen: die Wichtigkeit der Information, die beide gemeinsam tragen. |
 | **Bedingt mischen** | A wird nur innerhalb von zehn Klassen von B gemischt (und umgekehrt): was A **zusätzlich zu B** beiträgt. Grobe Näherung der „bedingten Wichtigkeit“. |
 | **Gruppen aus der Spearman-Korrelation** | Spalten mit \|Spearman\| über einer Schwelle kommen in eine Gruppe; die Schwelle ist ein Regler, kein Naturgesetz. |
@@ -161,7 +161,7 @@ if grid is not None:
     st.plotly_chart(build_sum_lines(grid["twin"], grid["linear"]), width="stretch", key="sum_chart")
     kind, text = ev.verdict_sum_grid(grid["twin"], grid["linear"])
     getattr(st, kind)(text)
-    st.caption("Je ähnlicher die Zwillinge, desto weniger **zusätzliche** Information trägt jeder einzeln: mischt man nur einen, kennt der Wald den anderen noch. Die Summe der Einzelwerte wird kleiner, "
+    st.caption("Je ähnlicher die Zwillinge, desto weniger **zusätzliche** Information trägt jeder einzeln: mischt man nur einen, kennt der Wald den anderen noch. Die Summe der Einzelwerte liegt bei ρ > 0 unter der bei ρ = 0, "
                "die Gruppe (beide gemeinsam gemischt) nicht.")
 
 st.markdown("---")
@@ -194,22 +194,22 @@ if grid is not None:
     st.plotly_chart(build_only_a(grid["twin"]), width="stretch", key="only_a_chart")
     kind, text = ev.verdict_only_a(grid["twin"])
     getattr(st, kind)(text)
-    st.caption("Die Faustregel „korrelierte Merkmale verwässern die Wichtigkeit“ gilt nur, wenn beide Zwillinge Information tragen. Eine bloße Kopie bekommt bis ρ = 0,9 nichts; erst wenn sie fast "
-               "deckungsgleich ist, verteilt der Wald seine Splits auf beide.")
+    st.caption("Die Faustregel „korrelierte Merkmale verwässern die Wichtigkeit“ gilt bis ρ = 0,9 nur, wenn beide Zwillinge Information tragen. Eine bloße Kopie bekommt bis ρ = 0,9 nichts; "
+               "ab ρ = 0,99 verteilt der Wald die Wichtigkeit auch auf sie.")
 
 st.markdown("---")
 
 # --- E4 Mischen erzeugt Unmögliches ---------------------------------------------------------------------------------------------------------
 
-st.subheader("🔬 Experiment 4: Mischen erzeugt Zeilen, die es nicht gibt")
+st.subheader("🔬 Experiment 4: Mischen erzeugt Zeilen, die kaum vorkommen")
 st.caption(f"Anteil der Zeilen, die nach dem Mischen von A außerhalb des {C.K_SIGMA:g}-Sigma-Bereichs der gemeinsamen Verteilung von A und B liegen; {C.OUTSIDE_SETS} Datensätze je ρ, daneben der exakte Wert (Quadratur).")
 if grid is not None:
     e4_rho = st.selectbox("ρ für das Verdikt", list(C.GRID_RHOS), index=3, key="e4_rho", format_func=lambda v: f"{v:g}".replace(".", ","))
     st.plotly_chart(build_outside(grid["outside"]), width="stretch", key="outside_chart")
     kind, text = ev.verdict_outside_grid(grid["outside"], e4_rho)
     getattr(st, kind)(text)
-    st.caption("Bei unabhängigen Merkmalen sind es nur die natürlichen 1,1 %. Bei ρ = 0,99 sind vier von fünf gemischten Zeilen Punkte, in deren Umgebung der Wald nichts gelernt hat: die Wichtigkeit "
-               "misst dann zum Teil, wie er außerhalb der Daten rät.")
+    st.caption("Bei unabhängigen Merkmalen sind es nur die natürlichen 1,1 %. Bei ρ = 0,99 sind rund drei von vier gemischten Zeilen Punkte aus einem Bereich, in dem nur etwa 1 % der echten Zeilen liegen "
+               "(Vermutung: dort extrapoliert der Wald, und die Wichtigkeit misst zum Teil, wie er außerhalb der Daten rät).")
 
 st.markdown("---")
 

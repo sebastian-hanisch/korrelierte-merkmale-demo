@@ -161,7 +161,7 @@ def test_claim_the_preset_help_texts_quote_grid_numbers(grid):
     std = h["Standardfall (Voreinstellung)"]
     assert f"die Summe der Einzelwichtigkeiten {_c(c[0.5]['sum'], 2)} (bei ρ = 0: {_c(c[0.0]['sum'], 2)})" in std and f"die Gruppe aus A und B {_c(c[0.5]['group'], 2)}" in std and f"je Zwilling {_c(c[0.5]['cond_a'], 2)}" in std
     spr = h["Dieselbe Information, springende Aufteilung"]
-    assert f"bleibt der mittlere Anteil von A bei {_p(c[0.99]['share_mean'])} %" in spr and f"streut mit {_c(c[0.99]['share_sd'], 3)}" in spr and f"in {_p(c[0.99]['extreme'])} % der Läufe" in spr
+    assert f"bleibt der mittlere Anteil von A bei {_p(c[0.99]['share_mean'])} %" in spr and f"streut mit {_c(c[0.99]['share_sd'], 3)}" in spr and f"in etwa einem Drittel der Läufe ({_p(c[0.99]['extreme'])} % bei 100 Wäldern)" in spr
     na = _nur_a(grid)
     only = h["Nur A trägt bei"]
     assert f"bekommt B {_c(na[0.999]['b'], 2)} und A nur noch {_c(na[0.999]['a'], 2)} (bei ρ = 0: A {_c(na[0.0]['a'], 2)}, B {_c(na[0.0]['b'], 2)})" in only

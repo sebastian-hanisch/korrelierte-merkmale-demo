@@ -84,7 +84,7 @@ def test_experiment_selectors_run():
 
 def test_the_experiment_sections_show_their_verdicts():
     text = _texts(_app())
-    for needle in ("Beide tragen bei: die Summe der Einzelwichtigkeiten ist", "der Anteil von A schwankt von Datensatz zu Datensatz", "mehr Bäume beruhigen sie nicht", "Die Verwässerung gilt nur, wenn beide Zwillinge Information tragen",
+    for needle in ("Beide tragen bei: die Summe der Einzelwichtigkeiten ist", "der Anteil von A schwankt von Datensatz zu Datensatz", "mehr Bäume beruhigen sie kaum", "gilt die Verwässerung nur, wenn beide Zwillinge Information tragen",
                    "nach dem Mischen von A liegen gezählt", "einzeln gemischt A"):
         assert needle in text, needle
 

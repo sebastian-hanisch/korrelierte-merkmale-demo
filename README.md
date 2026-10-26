@@ -7,7 +7,7 @@ Zehntes Stück der Korrelations-Reihe in der „Konzepte“-Reihe für die Websi
 
 ## Warum dieses Problem
 
-Die Permutationswichtigkeit (eine Spalte mischen, den Fehler messen) gilt als verlässlicher als die Gini-Wichtigkeit, bei **unabhängigen** Merkmalen. Bei Zwillingen kippt das: **dieselbe Information, bei jedem Neuziehen der Daten eine andere Aufteilung.** Befunde: bei ρ = 0,99 und tragenden Zwillingen bleibt der mittlere Anteil von A bei 49,0 %, doch er streut mit **0,181** von Datensatz zu Datensatz, und in **33,0 %** der Läufe gehört einem der beiden mehr als 70 %; mehr Bäume beruhigen das nicht. Mischt man einen Zwilling allein, entstehen **Zeilen, die es in der Welt nicht gibt**: bei ρ = 0,99 liegen **77,1 %** der Zeilen außerhalb des 3-Sigma-Bereichs. Und die Faustregel „korrelierte Merkmale verwässern die Wichtigkeit“ gilt nur, wenn **beide** Zwillinge Information tragen: ist B nur eine verrauschte Kopie von A, bleibt B bis ρ = 0,9 bei höchstens 0,002.
+Die Permutationswichtigkeit (eine Spalte mischen, den Fehler messen) gilt als verlässlicher als die Gini-Wichtigkeit, bei **unabhängigen** Merkmalen. Bei Zwillingen kippt das: **dieselbe Information, bei jedem Neuziehen der Daten eine andere Aufteilung.** Befunde: bei ρ = 0,99 und tragenden Zwillingen bleibt der mittlere Anteil von A bei 49,0 %, doch er streut mit **0,181** von Datensatz zu Datensatz, und in etwa einem Drittel der Läufe (**33,0 %** bei 100 Wäldern, Unsicherheit etwa ± 5 Prozentpunkte) gehört einem der beiden mehr als 70 %; mehr Bäume beruhigen die Streuung von Datensatz zu Datensatz kaum (0,163 bei 100 Bäumen), den Zufall des Waldes bei gleichen Daten schon. Mischt man einen Zwilling allein, entstehen **Zeilen aus einem Bereich, in dem nur etwa 1 % der echten Zeilen liegen**: bei ρ = 0,99 liegen **77,1 %** der Zeilen außerhalb des 3-Sigma-Bereichs. Und die Faustregel „korrelierte Merkmale verwässern die Wichtigkeit“ gilt bis ρ = 0,9 nur, wenn **beide** Zwillinge Information tragen: ist B nur eine verrauschte Kopie von A, bleibt B bis ρ = 0,9 bei höchstens 0,002; ab ρ = 0,99 verteilt der Wald die Wichtigkeit auch auf eine bloße Kopie.
 
 ## Befunde und Korrekturen gegenüber dem Plan
 
@@ -49,7 +49,7 @@ Alle Zahlen stehen in `tests/test_claims.py` (Raster-Werte gegen die JSON-Datei,
 | 0,99 | 0,696 | 0,724 | 0,000 | 1,420 | 1,869 | 0,946 | 0,966 |
 | 0,999 | 0,751 | 0,707 | 0,000 | 1,458 | 1,864 | 0,942 | 1,136 |
 
-**Die Aufteilung springt** (Experiment 2; Anteil von A an A + B, Mittel und Streuung über 100 Wälder; Anteil der Läufe, in denen einem Zwilling mehr als 70 % gehören; Streuung im angepassten linearen Modell):
+**Die Aufteilung springt** (Experiment 2; Anteil von A an A + B, Mittel und Streuung über 100 Wälder; Anteil der Läufe, in denen einem Zwilling mehr als 70 % gehören, bei 100 Wäldern je Zelle mit einer Unsicherheit bis etwa ± 5 Prozentpunkte; Streuung im angepassten linearen Modell):
 
 | ρ | Anteil A, Mittel | Streuung (Wald) | Läufe mit mehr als 70 : 30 | Streuung (linear, angepasst) |
 |---|---|---|---|---|
@@ -59,7 +59,7 @@ Alle Zahlen stehen in `tests/test_claims.py` (Raster-Werte gegen die JSON-Datei,
 | 0,99 | 0,490 | 0,181 | 33,0 % | 0,140 |
 | 0,999 | 0,515 | 0,135 | 20,0 % | 0,302 |
 
-**Mehr Bäume beruhigen nicht** (Experiment 2; ρ = 0,99; Streuung des Anteils von A, links bei gleichen Daten und neuem Wald (Mittel über 6 Datensätze mit je 40 Wäldern), rechts bei neuen Daten und je einem Wald (40 Datensätze)):
+**Mehr Bäume beruhigen die Streuung zwischen Datensätzen kaum** (Experiment 2; ρ = 0,99; Streuung des Anteils von A, links bei gleichen Daten und neuem Wald (Mittel über 6 Datensätze mit je 40 Wäldern), rechts bei neuen Daten und je einem Wald (40 Datensätze, Rauschen etwa ± 0,02)):
 
 | Bäume | gleiche Daten, neuer Wald | neue Daten |
 |---|---|---|
@@ -99,14 +99,14 @@ Alle Zahlen stehen in `tests/test_claims.py` (Raster-Werte gegen die JSON-Datei,
 
 | Frage | Befund |
 |---|---|
-| Schrumpft die Summe der Wichtigkeiten? (Experiment 1) | **Ja, bis ρ = 0,5:** 1,67 (ρ = 0) → **1,23** (ρ = 0,5) → 1,22 / 1,42 / 1,46 bei ρ = 0,9 / 0,99 / 0,999. Danach **steigt** sie wieder, weil der Wald die Splits unter den Zwillingen verteilt. Die Gruppe bleibt bei **1,77 bis 1,87** (ρ ≥ 0,5; ρ = 0: 1,67). Im linearen Modell mit bekannten Koeffizienten ist die Summe exakt 1,78 → 1,23 → 0,99 → 0,95 → 0,94; **der Wald liegt bei ρ = 0,5 mit 1,23 darauf**. Rauschmerkmale bleiben bei 0,00. |
-| Wem gehört die Wichtigkeit? (Experiment 2) | **Mal dem einen, mal dem anderen:** das Mittel bleibt 50 : 50 (0,48 bis 0,52), die Streuung wächst von 0,032 (ρ = 0) auf **0,143 / 0,181** (ρ = 0,9 / 0,99); bei ρ = 0,99 gehört in **33,0 %** der Läufe einem Zwilling mehr als 70 %. |
+| Schrumpft die Summe der Wichtigkeiten? (Experiment 1) | **Ja, bis ρ = 0,5:** 1,67 (ρ = 0) → **1,23** (ρ = 0,5); bis ρ = 0,9 bleibt sie bei 1,22 bis 1,23 und **steigt** erst ab ρ = 0,99 wieder (1,42 / 1,46 bei ρ = 0,99 / 0,999), vermutlich weil der Wald die Splits unter den Zwillingen verteilt. Die Gruppe liegt bei **1,77 bis 1,87** (ρ ≥ 0,5; ρ = 0: 1,67). Im linearen Modell mit bekannten Koeffizienten ist die Summe exakt 1,78 → 1,23 → 0,99 → 0,95 → 0,94; **der Wald trifft sie nur bei ρ = 0,5 mit 1,23** (bei ρ = 0,9: 1,22 gegen 0,99). Rauschmerkmale bleiben bei 0,00. |
+| Wem gehört die Wichtigkeit? (Experiment 2) | **Mal dem einen, mal dem anderen:** das Mittel bleibt 50 : 50 (0,48 bis 0,52), die Streuung wächst von 0,032 (ρ = 0) auf **0,143 / 0,181** (ρ = 0,9 / 0,99) und liegt bei ρ = 0,999 bei 0,135; bei ρ = 0,99 gehört in etwa einem Drittel der Läufe (**33,0 %**, ± 5 Prozentpunkte) einem Zwilling mehr als 70 %. |
 | Beruhigen mehr Bäume die Aufteilung? (Experiment 2) | **Nur bei gleichen Daten:** dort fällt die Streuung von 0,091 (10 Bäume) auf 0,028 (100 Bäume), bei **neuen Daten** nur von 0,200 auf 0,163: die Aufteilung hängt an der Stichprobe, nicht am Zufall des Waldes. |
 | Springt das lineare Modell auch? (Experiment 2) | **Ja, wenn es angepasst wird:** Streuung der Aufteilung 0,024 (ρ = 0), 0,048 (0,9), **0,140** (0,99), **0,302** (0,999), mehr als beim Wald bei ρ = 0,999; die Koeffizienten wandern bei Multikollinearität. Mit **bekannten** Koeffizienten wäre die Aufteilung exakt 50 : 50. |
-| Verwässert die Korrelation die Wichtigkeit eines Zwillings ohne Information? (Experiment 3) | **Nein, nicht bis ρ = 0,9:** B bleibt bei höchstens 0,002, A bei 1,84 bis 1,87; erst bei ρ = 0,99 bekommt B **0,080** und bei ρ = 0,999 **0,504** (A fällt von 1,87 auf 0,99, die Summe bleibt bei 1,50). |
-| Was erzeugt das Mischen eines Zwillings? (Experiment 4) | Bei ρ = 0 die natürlichen **1,1 %** (e^(−4,5)), bei ρ = 0,5 **4,4 %**, bei ρ = 0,9 **35,8 %**, bei ρ = 0,99 **77,1 %**, bei ρ = 0,999 **92,7 %** der Zeilen außerhalb des 3-Sigma-Bereichs (exakt; gezählt höchstens 0,5 Prozentpunkte daneben). Der Wald hat dort nichts gelernt. |
-| Welche Antwort ist die richtige? (Experiment 5) | **Es sind drei Fragen:** bei ρ = 0,99 ist A einzeln **0,70**, als Gruppe mit B **1,87** und bedingt auf B **0,04**. Die Gruppe stellt die Summe von ρ = 0 (1,67) wieder her (1,77 bis 1,87); das bedingte Mischen zeigt, dass A zusätzlich zu B kaum etwas beiträgt (0,80 → 0,44 → 0,11 → 0,04). |
-| Findet die Spearman-Gruppierung die Zwillinge? (Experiment 5) | **Erst ab ρ = 0,99 sicher:** mit der Schwelle 0,9 in 0 % der Läufe bei ρ = 0 und 0,5, in **17 %** bei ρ = 0,9 (die Stichprobenkorrelation liegt meist knapp darunter) und in 100 % ab ρ = 0,99. Die Schwelle ist ein Regler. |
+| Verwässert die Korrelation die Wichtigkeit eines Zwillings ohne Information? (Experiment 3) | **Nein, nicht bis ρ = 0,9:** B bleibt bei höchstens 0,002, A bei 1,84 bis 1,87; erst bei ρ = 0,99 bekommt B **0,080** und bei ρ = 0,999 **0,504** (A fällt von 1,87 auf 0,99, die Summe sinkt auf 1,50, die Gruppe bleibt bei 1,86 bis 1,87). |
+| Was erzeugt das Mischen eines Zwillings? (Experiment 4) | Bei ρ = 0 die natürlichen **1,1 %** (e^(−4,5)), bei ρ = 0,5 **4,4 %**, bei ρ = 0,9 **35,8 %**, bei ρ = 0,99 **77,1 %**, bei ρ = 0,999 **92,7 %** der Zeilen außerhalb des 3-Sigma-Bereichs (exakt; gezählt höchstens 0,5 Prozentpunkte daneben). Das sind Zeilen aus einem Bereich, in dem nur etwa 1 % der echten Zeilen liegen; vermutlich extrapoliert der Wald dort. |
+| Welche Antwort ist die richtige? (Experiment 5) | **Es sind drei Fragen:** bei ρ = 0,99 ist A einzeln **0,70**, als Gruppe mit B **1,87** und bedingt auf B **0,04**. Die Gruppe liegt mit 1,77 bis 1,87 auf dem Niveau der Summe von ρ = 0 (1,67) oder darüber; das bedingte Mischen zeigt, dass A zusätzlich zu B kaum etwas beiträgt (0,80 → 0,44 → 0,11 → 0,04). |
+| Findet die Spearman-Gruppierung die Zwillinge? (Experiment 5) | **Ab ρ ≈ 0,93 in fast allen Läufen** (Schwelle 0,9, n = 600; das Raster hat nur die Stufen 0,9 und 0,99): in 0 % der Läufe bei ρ = 0 und 0,5, in **17 %** bei ρ = 0,9 (die Stichprobenkorrelation liegt meist knapp darunter) und in 100 % bei ρ = 0,99 und 0,999. Die Schwelle ist ein Regler. |
 | Handwerte | Ein Modell, das nur A liest (Modell = 2 A, y = 2 A), hat die Wichtigkeit 2 (Erwartung über alle Umordnungen von vier Wochen); zwei identische Eingaben (Modell = A + B mit B = A) einzeln 0,5, gemeinsam gemischt 2,0; bei ρ = 0 ist der Anteil außerhalb von 3 Sigma e^(−4,5) = 0,0111; eine konstante Spalte und ein Modell, das sie nicht liest, haben die Wichtigkeit exakt 0. |
 
 ## Ehrliche Grenzen
