@@ -32,7 +32,11 @@ def _assert_close(a, b, path="probe"):
 
 def test_probe_still_matches_the_generator(grid):
     """Ändert sich Erzeuger, Wald-Kern oder Seed-Ableitung, passt die gespeicherte Probe nicht mehr: dann tools/make_grid.py neu laufen lassen."""
-    _assert_close(ev.grid_probe(), grid["probe"])
+    probe, stored = ev.grid_probe(), grid["probe"]
+    # Kleine Wälder aus wenigen Bäumen reagieren auf Gleichstände in der Split-Suche (Summationsreihenfolge je Plattform): die Streuung der Zelle „trees“ wird deshalb nur grob verglichen
+    for key in ("same_data_sd", "new_data_sd"):
+        assert probe["trees"].pop(key) == pytest.approx(stored["trees"].pop(key), abs=0.02), key
+    _assert_close(probe, stored)
 
 
 def test_grid_has_every_cell_exactly_once(grid):
